@@ -1,3 +1,5 @@
+import math
+import time
 from flask import Flask, jsonify, make_response, abort, request
 
 app = Flask(__name__)
@@ -24,6 +26,22 @@ def add():
     if 'data' in jsonraw and len(jsonraw['data']) > 0:
         result = sum(jsonraw['data'])
 
+    return jsonify({ 'result': result })
+
+# silly work API
+@app.route('/api/v{}/dowork'.format(VERSION), methods=['POST'])
+def dowork():
+    if not request.json or not 'data' in request.json:
+        abort(400)
+
+    jsonraw = request.json
+    result = -1.0
+    if 'data' in jsonraw and len(jsonraw['data']) > 0:
+        result = 2.4
+        for d in jsonraw['data']:
+            result += math.pow(float(d)*4.51e2/5.123e2, 2.3)
+
+    time.sleep(3)
     return jsonify({ 'result': result })
 
 @app.route('/')
